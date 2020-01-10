@@ -6,16 +6,13 @@ const helmet = require('helmet')
 const logger = require('../logger')
 const { NODE_ENV } = require('./config')
 const app = express()
-const bookmarksRounter = require('./bookmarks/bookmarks-router')
+const bookmarksRouter = require('./bookmarks/bookmarks-router')
 
 const morganOption = (NODE_ENV === 'production')
   ? 'tiny'
   : 'common';
 
-app.use(morgan(morganOption))
-app.use(helmet())
-app.use(cors())
-app.use(bookmarksRounter)
+
 
 //API token 
 app.use(function validateBearerToken(req, res, next) {
@@ -29,6 +26,10 @@ app.use(function validateBearerToken(req, res, next) {
   // move to the next middleware
   next()
 })
+app.use(morgan(morganOption))
+app.use(helmet())
+app.use(cors())
+app.use(bookmarksRouter)
 app.get('/', (req, res) => {
   res.send('Hello, boilerplate!')
 })
